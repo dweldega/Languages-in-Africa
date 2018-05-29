@@ -1,0 +1,16 @@
+body {
+  font: 13px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+/*Add Tooltip Type here*/
+#tooltip rect {
+    fill: #5998ffF0;
+    font-weight: bold;
+}
