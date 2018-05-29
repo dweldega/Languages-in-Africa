@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3: Setting path fills dynamically to generate a choropleth</title>
+        <body> <h2 style = "text-align:center; color:#326c99" ><bold>2011 Population Density & Fertility Rate for Ethiopia</bold></h1></body>
+		<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+		<style type="text/css">
+			/* No style rules here yet */		
+		</style>
+        
+	</head>
+	<body>
+        <button color=blue>Toggle</button>
+		<script type="text/javascript">
+
+			//Width and height
+			var w = 1000;
+			var h = 500;
+
+			//Define map projection
+			var projection = d3.geoEquirectangular()
+                                    .center([35,8]) // Africa's longitude and latitude.
+								   .translate([w/2, h/2])
+								   .scale([2000]);
+
+			
+            //Define path generator
+			
+            var path = d3.geoPath()
+							 .projection(projection);
+							 
+			//Define threshold scale to sort data values into buckets of color based on density
+			var color = d3.scaleThreshold()
+								.domain([30,60,90, 120])    .range(["rgb(199,233,192)","rgb(161,217,155)","rgb(116,196,118)","rgb(65,171,93)","rgb(35,139,69)"]);
+								//Colors derived from ColorBrewer, by Cynthia Brewer, and included in
+            
+            //color scale for the total fertility rate
+            var colorTFR = d3.scaleThreshold()
+								.domain([1,3,5,7])    .range(["rgb(78,179,211)","rgb(43,140,190)","rgb(8,88,158)","rgb(116,169,207)","rgb(12,44,132)"]);
+								//https://github.com/d3/d3-scale-chromatic
+
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+			//Load in agriculture data
+			//d3.csv("data.csv", function(error, data) {
+
+				//Set input domain for color scale
+//				color.domain([
+//					d3.min(data, function(d) { return d.value; }), 
+//					d3.max(data, function(d) { return d.value; })
+//				]);
+
+				//Load in GeoJSON data
+				d3.json("GeoAfrica.json", function(error, json) {
+
+					//Merge the ag. data and GeoJSON
+					//Loop through once for each ag. data value
+//					for (var i = 0; i < data.length; i++) {
+//				
+//						//Grab state name
+//						var dataState = data[i].state;
+//						
+//						//Grab data value, and convert from string to float
+//						var dataValue = parseFloat(data[i].value);
+//                        //Grab data value, and convert from sting
+//                        var dataTFR = parseFloat(data[i].TFR);
+//				    
+				    
+						//Find the corresponding state inside the GeoJSON
+						for (var j = 0; j < json.features.length; j++) {
+						
+							var jsonState = json.features[j].properties.sovereignt;
+				
+							if (dataState == jsonState) {
+						
+								//Copy the data value into the JSON
+								json.features[j].properties.value = dataValue;
+								
+                                json.features[j].properties.TFR = dataTFR;
+								//Stop looking through the JSON
+								break;
+								
+							}
+						}		
+					//}
+                    console.log(json);
+					//Bind data and create one path per GeoJSON feature
+					svg.selectAll("path")
+					   .data(json.features)
+					   .enter()
+					   .append("path")
+					   .attr("d", path)
+					   .style("fill", function(d) {
+					   		//Get data value
+					   		var value = d.properties.value;
+					   		
+					   		if (value) {
+					   			//If value exists…
+						   		return color(value);
+					   		} else {
+					   			//If value is undefined…
+						   		return "#ccc";
+					   		}
+					   });
+			
+				});
+			
+			//});
+            
+            //switch data sets when toggle is pressed
+			toggle = false;
+            d3.select("button").on("click", function(){
+                toggle = !toggle;
+                if (toggle==true){
+                    d3.selectAll("path")
+                    .style("fill", function(d) {
+					   		//Get data value
+					   		var value = d.properties.TFR;
+					   		
+					   		if (value) {
+					   			//If value exists…
+						   		return colorTFR(value);
+					   		} else {
+					   			//If value is undefined…
+						   		return "#ccc";
+					   		}
+                    });
+                }
+                else{
+                    d3.selectAll("path")
+                .style("fill", function(d) {
+					   		//Get data value
+					   		var value = d.properties.value;
+					   		
+					   		if (value) {
+					   			//If value exists…
+						   		return color(value);
+					   		} else {
+					   			//If value is undefined…
+						   		return "#ccc";
+					   		}
+                });
+                }
+                
+            });
+            
+            //creates the legend for population density
+            var svgLegend = d3.select("svg");
+
+            svgLegend.append("g")
+            .attr("class", "legendQuant")
+            .attr("transform", "translate(20,40)");
+
+var legend = d3.legendColor()
+    .labelFormat(d3.format(".2f"))
+    .labels(d3.legendHelpers.thresholdLabels).title("Population Density in sq.km")
+    //.useClass(true)
+    .scale(color)
+
+/*
+----legendHelpers.thresholdLabels----
+function({
+  i,
+  genLength,
+  generatedLabels,
+  labelDelimiter
+}) {
+  if (i === 0) {
+    const values = generatedLabels[i].split(` ${labelDelimiter} `)
+    return `Less than ${values[1]}`
+  } else if (i === genLength - 1) {
+    const values = generatedLabels[i].split(` ${labelDelimiter} `)
+    return `${values[0]} or more`
+  }
+  return generatedLabels[i]
+}
+
+*/
+
+//creates the legend for fertility rate
+
+svgLegend.select(".legendQuant")
+  .call(legend);
+            
+            svgLegend.append("g")
+            .attr("class", "legendQuant1")
+            .attr("transform", "translate(20,220)");
+
+var legend1 = d3.legendColor()
+    .labelFormat(d3.format(".2f"))
+    .labels(d3.legendHelpers.thresholdLabels).title("Fertility Rate")
+    //.useClass(true)
+    .scale(colorTFR)
+
+/*
+----legendHelpers.thresholdLabels----
+function({
+  i,
+  genLength,
+  generatedLabels,
+  labelDelimiter
+}) {
+  if (i === 0) {
+    const values = generatedLabels[i].split(` ${labelDelimiter} `)
+    return `Less than ${values[1]}`
+  } else if (i === genLength - 1) {
+    const values = generatedLabels[i].split(` ${labelDelimiter} `)
+    return `${values[0]} or more`
+  }
+  return generatedLabels[i]
+}
+
+*/
+
+svgLegend.select(".legendQuant1")
+  .call(legend1);
+          
+            
+
+            
+		</script>
+        <h4>Created by: Danay Weldegabriel </h4>
+        <li><a href=https://github.com/dweldega/geoMapping>Github</a></li>
+        
+      <!--<h4>Suresh Lodha</h4>-->
+      
+   
+    <h4>Files Submitted:</h4>
+    
+    <ul>
+      <li>index.html</li>
+      <li>ETH_adm1.json</li>
+      <li>data.csv</li>
+    </ul>
+      
+    <h4> Sources: </h4>
+      <ul>
+      <li><a href=https://en.wikipedia.org/wiki/Demographics_of_Ethiopia>Fertility Rate</a></li>
+      <li><a href=https://en.wikipedia.org/wiki/Regions_of_Ethiopia>Population</a></li>
+    </ul> 
+      
+	</body>
+</html>
