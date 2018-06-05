@@ -1,6 +1,12 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
 /*global d3*/
 
+// Statics
+var YEARS = ["1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017"];
+var POP = "Population";
+var AREA = "Area";
+// End statics
+
 //Define Margin
 var margin = {left: 80, right: 80, top: 50, bottom: 50 }, 
     width = 960 - margin.left -margin.right,
@@ -32,6 +38,34 @@ var path = d3.geoPath()
     .projection(projection);
 
 
+// We are going to store all the data on countries in a dictionary of dictionaries
+// So population is going to be countryData['Country']['Population'] = [1,2,3,...]
+var countryData = {};
+d3.csv("data/AfricaPopulation.csv", function(data) {
+    data.forEach(function(d) {
+        countryData[d.Country] = {}
+        
+        // Load the population data into an array for saving
+        var pop = [];
+        for(var i = 0; i < YEARS.length; ++i) {
+            pop.push(+d[YEARS[i]])
+        }
+        countryData[d.Country][POP] = pop;
+    });
+});
+
+d3.csv("data/AfricaPopulationArea.csv", function(data) {
+    data.forEach(function(d) {
+        // If we have found a country that wasn't in the list before, initialize the dictionary
+        if(!(d.Country in countryData)) {
+            countryData[d.Country] = {}
+            countryData[d.Country][POP] = +d.Population;
+        }
+        countryData[d.Country][AREA] = +d.Area;
+    });
+});
+
+// Load the geojson data and draw it
 d3.json("GeoAfrica.json", function(data) {
     var features = data.features;
     
@@ -46,7 +80,17 @@ d3.json("GeoAfrica.json", function(data) {
         .data(features)
         .enter().append('path')
         .attr('d', path)
-        .attr("fill", "#FFF")
+        .attr("fill", function(d) { return countryFill(d.properties.brk_name); })
         .attr("stroke","black")
         .attr("stroke-width", 1)
 });
+
+function countryFill(name) {
+    if(!(name in countryData)) {
+        console.log("Missing " + name);
+        return "#FFF";
+    }
+//    console.log(name);
+//    console.log(countryData[name][POP]);
+    return "#FFF";
+}
