@@ -6,8 +6,7 @@ h1 {
 	text-align: center;
 }
 .project-container {
-	width: 50%;
-	margin: auto;
+	text-align: center;
 }
 .svgContainer {
     width: auto;
@@ -28,6 +27,7 @@ h1 {
 }
 .slider-container {
     width: 700px; /* Same as the width in the javascript */
+    margin: auto;
 }
 .slider {
     -webkit-appearance: none;
