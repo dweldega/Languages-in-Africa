@@ -9,7 +9,7 @@ var AREA = "Area";
 
 //Define Margin
 var margin = {left: 80, right: 80, top: 50, bottom: 50 }, 
-    width = 700 - margin.left -margin.right,
+    width = 1000 - margin.left -margin.right,
     height = 500 - margin.top - margin.bottom,
     scaleWidth=width + margin.left + margin.right,
     scaleHeight=50;
@@ -35,7 +35,7 @@ var scaleY = d3.scaleLinear()
     .range([height, 0]);
 
 var scaleColor = d3.scaleLinear()
-    .range(['white', 'red']);
+    .range(['#ffebe6', 'red']);
 
 var projection = d3.geoMercator()
     .scale(300)
@@ -139,13 +139,12 @@ d3.queue()
 function countryFill(name) {
     if(!(name in countryData)) {
 //        console.log("Missing " + name);
-        return "#FFF";
+        return "#ebebe0";
     }
-    if(isNaN(countryData[name][AREA]))
-        console.log(name + "'s AREA is NaN");
     
     var popDensity = countryData[name][POP][0] / countryData[name][AREA];
     
-//    return scaleColor(popDensity);
-    return scaleColor(countryData[name][POP][0]);
+    var scaleVariable = scaleColor(countryData[name][POP][0]);
+    
+    return scaleVariable;
 }
