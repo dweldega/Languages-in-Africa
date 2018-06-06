@@ -21,6 +21,10 @@ var svg = d3.select(".svgContainer").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
+var legendCont = d3.select(".legend-container").append("svg")
+    .attr("width", 200)
+    .attr("height", 400);
+    
 // Define the scales
 var scaleX = d3.scaleLinear()
     .domain([-25,0]) // Give appropriate range in the scale
@@ -83,12 +87,9 @@ function GeoAfrica(data) {
     for(var country in countryData) {
         domains.push([d3.min(countryData[country][POP]), d3.max(countryData[country][POP])]);
     }
-    
-    var colorTFR = d3.scaleThreshold()
-								.domain([1,3,5,7])    .range(["rgb(78,179,211)","rgb(43,140,190)","rgb(8,88,158)","rgb(116,169,207)","rgb(12,44,132)"]);
-								//https://github.com/d3/d3-scale-chromatic
+
     scaleColor.domain([d3.min(domains, function(d) { return d[0]; }), d3.max(domains, function(d) { return d[1]; })]);
-    
+        
     // Draw each province as a path
     // Taken from http://bl.ocks.org/almccon/fe445f1d6b177fd0946800a48aa59c71
     svg.selectAll('path')
@@ -97,7 +98,26 @@ function GeoAfrica(data) {
         .attr('d', path)
         .attr("fill", function(d) { return countryFill(d.properties.brk_name); })
         .attr("stroke","black")
-        .attr("stroke-width", 1)
+        .attr("stroke-width", 1);
+        
+        
+        
+	var colorPopulation = d3.scaleThreshold()
+		.domain([1,3,5,7])    
+		.range(["rgb(78,179,211)","rgb(43,140,190)","rgb(8,88,158)","rgb(116,169,207)","rgb(12,44,132)"]);
+		//https://github.com/d3/d3-scale-chromatic
+	
+	var popLegend = d3.legendColor()
+		.labelFormat(d3.format(".2f"))
+		.labels(d3.legendHelpers.thresholdLabels).title("Population")
+		.scale(scaleColor);
+	
+	legendCont.append("g")
+		.call(popLegend)
+		.attr("class", "legendQuant")
+		.attr("transform", "translate(20,40)");
+	
+    
 }
 
 d3.queue()

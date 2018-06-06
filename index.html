@@ -4,48 +4,55 @@
         <title>Poverty in Africa</title>
         <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
         <link rel="stylesheet" type="text/css" href="PovertyAfrica.css">
     </head>
     <body>
     <body>
         <h1>Poverty in Africa</h1>
+        <div class='project-container'>
         <div class='svgContainer'></div>
-        <div class='buttons'>
-            <input type='radio' value='poverty' /> Poverty Rate <br/>
-            <input type='radio' value='popdensity' checked=true /> Population Density <br/>
-            <input type='radio' value='hdi' /> HDI <br/>
-            <input type='radio' value='gini' /> Gini Coefficient <br/>
-            <input type='radio' value='inflation' /> Inflation Rate <br/>
+        <div class='right-container'>
+			<div class='buttons'>
+				<input type='radio' value='poverty' /> Poverty Rate <br/>
+				<input type='radio' value='popdensity' checked=true /> Population Density <br/>
+				<input type='radio' value='hdi' /> HDI <br/>
+				<input type='radio' value='gini' /> Gini Coefficient <br/>
+				<input type='radio' value='inflation' /> Inflation Rate <br/>
+			</div>
+			<div class='legend-container'>
+				
+			</div>
         </div>
         <div class='slider-container'>
             <input class="slider" type="range" min="1998" max="2017" step="1" value="1998">
         </div>
+        </div>
         
-        
-        
-        <p>The goal is to create a geo mapping of the African continent and gather data that can be used to visualize the dependencies of how population growth is affected by poverty, inflation and HDI over a certain time period. We plan on using a slider to show the differnt years and radio buttons to switch between the different variable.</p>
+        <div class='project-description'>
+			<p>The goal is to create a geo mapping of the African continent and gather data that can be used to visualize the dependencies of how population growth is affected by poverty, inflation and HDI over a certain time period. We plan on using a slider to show the differnt years and radio buttons to switch between the different variable.</p>
 
-        <ul>
-            <li> <a href="https://en.wikipedia.org/wiki/List_of_African_countries_by_Human_Development_Index">
-              HDI info</a></li>
-            <li> <a href="http://povertydata.worldbank.org/poverty/category/LIC">
-                Poverty data</a></li>
-            <li> <a href="https://en.wikipedia.org/wiki/Economy_of_Africa">
-                Inflation</a></li>
-        </ul>
-        <h3><strong>Visualization</strong></h3>
-        <ol>
-            <li> <a href="http://esango.un.org/sp/ldc_gemu/web/StatPlanet.html?_ga=2.55964971.1092007903.1527814164-277299507.1527814164">
-                Sample visualization</a></li>
-            <li> <a href="http://dweldega.github.io/Languages-in-Africa/Africa.html">
-                Outline of Africa</a></li>
-            <li> <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG">
-                Inflation</a></li>
+			<ul>
+				<li> <a href="https://en.wikipedia.org/wiki/List_of_African_countries_by_Human_Development_Index">
+				  HDI info</a></li>
+				<li> <a href="http://povertydata.worldbank.org/poverty/category/LIC">
+					Poverty data</a></li>
+				<li> <a href="https://en.wikipedia.org/wiki/Economy_of_Africa">
+					Inflation</a></li>
+			</ul>
+			<h3><strong>Visualization</strong></h3>
+			<ol>
+				<li> <a href="http://esango.un.org/sp/ldc_gemu/web/StatPlanet.html?_ga=2.55964971.1092007903.1527814164-277299507.1527814164">
+					Sample visualization</a></li>
+				<li> <a href="http://dweldega.github.io/Languages-in-Africa/Africa.html">
+					Outline of Africa</a></li>
+				<li> <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG">
+					Inflation</a></li>
 
-        </ol>
-        <p>Project by: Danay Weldegabriel & Aaron Steele</p>
-        <p>Emails: dweldega@ucsc.edu, atsteele@ucsc.edu</p>
-        
+			</ol>
+			<p>Project by: Danay Weldegabriel & Aaron Steele</p>
+			<p>Emails: dweldega@ucsc.edu, atsteele@ucsc.edu</p>
+        </div>
         
         <script type="text/javascript" src="PovertyAfrica.js"></script>
     </body>

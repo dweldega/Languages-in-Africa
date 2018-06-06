@@ -2,16 +2,30 @@ body {
     
 }
 
+h1 {
+	text-align: center;
+}
+.project-container {
+	width: 50%;
+	margin: auto;
+}
 .svgContainer {
     width: auto;
     display: inline-block;
     
 }
+.right-container {
+	display: inline-block;
+	vertical-align: top;
+}
 .buttons {
-    display: inline-block;
-    vertical-align: top;
+    display: block;
 }
 
+.legend-container {
+	margin-top: 5%;
+	display: block;
+}
 .slider-container {
     width: 700px; /* Same as the width in the javascript */
 }
@@ -43,4 +57,8 @@ body {
     border-radius: 50%;
     background: #4CAF50;
     cursor: pointer;
+}
+
+.project-description {
+	width: 50%;
 }
