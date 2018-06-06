@@ -77,16 +77,16 @@ function AfricaArea(data) {
 function GeoAfrica(data) {
     var features = data.features;
     
-    scaleX.domain([d3.min(features, function(d) { if(d.geometry == null) { return Infinity;  } else { return d.geometry.coordinates[0][0][0]; } }),
-                   d3.max(features, function(d) { if(d.geometry == null) { return -Infinity; } else { return d.geometry.coordinates[0][0][0]; } })]);
-    scaleY.domain([d3.min(features, function(d) { if(d.geometry == null) { return -Infinity; } else { return d.geometry.coordinates[0][0][1]; } }), 
-                   d3.max(features, function(d) { if(d.geometry == null) { return Infinity;  } else { return d.geometry.coordinates[0][0][1]; } })]);
     
     // Set the color scales
     var domains = []
     for(var country in countryData) {
         domains.push([d3.min(countryData[country][POP]), d3.max(countryData[country][POP])]);
     }
+    
+    var colorTFR = d3.scaleThreshold()
+								.domain([1,3,5,7])    .range(["rgb(78,179,211)","rgb(43,140,190)","rgb(8,88,158)","rgb(116,169,207)","rgb(12,44,132)"]);
+								//https://github.com/d3/d3-scale-chromatic
     scaleColor.domain([d3.min(domains, function(d) { return d[0]; }), d3.max(domains, function(d) { return d[1]; })]);
     
     // Draw each province as a path
