@@ -76,7 +76,6 @@ function AfricaArea(data) {
     });
 }
 
-
 // Load the geojson data and draw it
 function GeoAfrica(data) {
     var features = data.features;
@@ -117,6 +116,7 @@ function GeoAfrica(data) {
 		.attr("class", "legendQuant")
 		.attr("transform", "translate(20,40)");
 	
+    console.log(countryData);
     
 }
 
@@ -140,6 +140,74 @@ function countryFill(name) {
     if(!(name in countryData)) {
 //        console.log("Missing " + name);
         return "#ebebe0";
+    }
+    
+    var popDensity = countryData[name][POP][0] / countryData[name][AREA];
+    
+    var scaleVariable = scaleColor(popDensity);
+    
+    return scaleVariable;
+}
+
+
+var choice = 1;
+
+d3.selectAll("input").on("change", function(){
+    choice = this.value;
+
+    console.log(choice);
+    
+    d3.queue()
+    //.defer(d3.csv, "data/AfricaPopulation.csv")
+    .defer(d3.csv, "data/AfricaArea.csv")
+    .defer(d3.json, "data/GeoAfrica.json")
+    .await(function(error, csvAfricaArea, jsonAfrica) {
+        if(error) { console.error(error); }
+        else {
+            // This is after all the csv files have been loaded, so call the processing functions
+            //AfricaPopulation(csvAfricaPopulation);
+            //AfricaArea(csvAfricaArea);
+            //GeoAfrica(jsonAfrica); // This one should be last
+            // Now all the files have been processed, we can actually use the data now
+            updateGeoAfrica(jsonAfrica)
+        }
+    });
+    
+    
+});
+
+// Updates happen here onwards
+function updateGeoAfrica(data) {
+    var features = data.features;
+    
+    // Set the color scales
+    var domains = []
+    for(var country in countryData) {
+        domains.push([d3.min(countryData[country][POP]), d3.max(countryData[country][POP])]);
+    }
+
+    scaleColor.domain([d3.min(domains, function(d) { return d[0]; }), d3.max(domains, function(d) { return d[1]; })]);
+        
+    // Draw each province as a path
+    // Taken from http://bl.ocks.org/almccon/fe445f1d6b177fd0946800a48aa59c71
+    svg.selectAll('path')
+        .attr("fill", function(d) { return countryFill2(d.properties.brk_name); });
+        
+        
+    console.log(countryData);
+    
+}
+
+function countryFill2(name) {
+    if(!(name in countryData)) {
+        
+        if (choice == 1){
+            return "#0f0";
+        } else if (choice == 2){
+            return "#f0f";
+        }
+//        console.log("Missing " + name);
+        return "#000";
     }
     
     var popDensity = countryData[name][POP][0] / countryData[name][AREA];
