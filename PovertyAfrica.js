@@ -22,24 +22,17 @@ var svg = d3.select(".svgContainer").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .attr("transform", "translate(" + (margin.left-100) + "," + margin.top + ")")
 
-var legendCont = d3.select(".legend-container").append("svg")
-    .attr("width", 600)
-    .attr("height", 50);
+var legendWidth = 400;
+var legendHeight = 50;
+var legendCont = svg.append("g")
+    .attr("class", ".legend-container")
+    .attr("width", legendWidth)
+    .attr("height", legendHeight)
+    .attr("transform", "translate(400, -20)");
     
 // Define the scales
-var scaleX = d3.scaleLinear()
-    .domain([-25,0]) // Give appropriate range in the scale
-    .range([0,width]);
-
-var scaleY = d3.scaleLinear()
-    .domain([50, 70]) // Give appropriate range in the scale
-    .range([height, 0]);
-
-var scaleColor = d3.scaleLinear()
-    .range(['#ffebe6', 'red']);
-
 var projection = d3.geoMercator()
     .scale(300)
     .center([18, 1])
@@ -50,11 +43,11 @@ var path = d3.geoPath()
 
 var colorPopDens = d3.scaleThreshold()
     .domain([1, 10, 50, 200, 500, 1000])
-    .range(d3.schemeOrRd[6]);
+    .range(d3.schemeYlGn[6]);
 
 var colorPov = d3.scaleThreshold()
     .domain([0, 1, 20, 50, 100])
-    .range(d3.schemeYlGn[5]);
+    .range(d3.schemeOrRd[5]);
 
 var colorGini = d3.scaleThreshold()
     .domain([10, 20, 30, 40, 50, 100])
@@ -70,28 +63,42 @@ function CreateLegend() {
 	var curColor = null;
 	
 	legendCont.html("");
-	
-	if(choice == 0)
+	var xDomain = [0, 1000];
+    
+	if(choice == 0) {
 		curColor = colorPov;
-	else if(choice == 1)
+        xDomain = [0, 100]
+    }
+	else if(choice == 1) {
 		curColor = colorPopDens;
-	else if(choice == 4)
+        xDomain = [0, 1000]
+    }
+    else if(choice == 2) {
+        
+    }
+    else if(choice == 3) {
+        
+    }
+	else if(choice == 4) {
 		curColor = colorGini;
-	
+        xDomain = [10, 100]
+    }
+    
 	// TODO: Change domain with choice
+    
 	var x = d3.scaleSqrt()
-		.domain([0, 4000])
-		.rangeRound([0, 950]);
+		.domain(xDomain)
+		.rangeRound([0, legendWidth*0.95]);
 
 
-	legendCont.selectAll("rect")
-	  .data(curColor.range().map(function(d) {
-		  d = curColor.invertExtent(d);
-		  if (d[0] == null) d[0] = x.domain()[0];
-		  if (d[1] == null) d[1] = x.domain()[1];
-		  return d;
-		}))
-	  .enter().append("rect")
+        legendCont.selectAll("rect")
+        .data(curColor.range().map(function(d) {
+            d = curColor.invertExtent(d);
+            if (d[0] == null) d[0] = x.domain()[0];
+            if (d[1] == null) d[1] = x.domain()[1];
+            return d;
+        }))
+        .enter().append("rect")
 		.attr("height", 8)
 		.attr("x", function(d) { return x(d[0]); })
 		.attr("width", function(d) { return x(d[1]) - x(d[0]); })
@@ -100,7 +107,7 @@ function CreateLegend() {
 	legendCont.append("text")
 		.attr("class", "caption")
 		.attr("x", x.range()[0])
-		.attr("y", -6)
+		.attr("y", 35)
 		.attr("fill", "#000")
 		.attr("text-anchor", "start")
 		.attr("font-weight", "bold")
@@ -154,7 +161,7 @@ function AfricaPopulationDensity() {
 		}
 		else { // We have the data necessary, so calculate population density
 			// Init the array
-			popDens = [];
+			var popDens = [];
 			
 			for(var i = 0; i < YEARS.length; ++i) {
 				popDens.push(countryData[country][POP][i] / countryData[country][AREA]);
@@ -199,14 +206,6 @@ var geoData = null;
 function GeoAfrica(data) {
     var features = data.features;
     geoData = data;
-    
-    // Set the color scales
-    var domains = []
-    for(var country in countryData) {
-        domains.push([d3.min(countryData[country][POP]), d3.max(countryData[country][POP])]);
-    }
-
-    scaleColor.domain([d3.min(domains, function(d) { return d[0]; }), d3.max(domains, function(d) { return d[1]; })]);
         
     // Draw each province as a path
     // Taken from http://bl.ocks.org/almccon/fe445f1d6b177fd0946800a48aa59c71

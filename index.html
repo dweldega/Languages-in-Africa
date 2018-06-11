@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Poverty in Africa</title>
+        <title>Poverty and HDI in Africa</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -12,9 +12,9 @@
         <link rel="stylesheet" type="text/css" href="PovertyAfrica.css">
     </head>
     <body onload="btnForm.reset();">
-        <h1>Poverty in Africa</h1>
+        <h1>Poverty and HDI in Africa</h1>
         <div class='project-container'>
-            <div class='legend-container'></div>
+            <!--<div class='legend-container'></div>-->
             <div class='svgContainer'></div>
              
             <div class='slider-container'>
@@ -27,9 +27,6 @@
                           <input type="radio" name="variable" value='0' checked=true>Poverty Rate
                         </label>
                         <label class="radio-inline">
-                          <input type="radio" name="variable" value='1'>Population Density
-                        </label>
-                        <label class="radio-inline">
                           <input type="radio" name="variable" value='2'>HDI
                         </label> 
                         <label class="radio-inline">
@@ -37,6 +34,10 @@
                         </label>
                         <label class="radio-inline">
                           <input type="radio" name="variable" value='4'>Gini Coefficient
+                        </label>
+                        <br />
+                        <label class="radio-inline">
+                          <input type="radio" name="variable" value='1'>Population Density
                         </label>
                       </form>
                 </div>
