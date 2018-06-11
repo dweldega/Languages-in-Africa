@@ -64,14 +64,17 @@ function CreateLegend() {
 	
 	legendCont.html("");
 	var xDomain = [0, 1000];
+    var legendText = "";
     
 	if(choice == 0) {
 		curColor = colorPov;
         xDomain = [0, 100]
+        legendText = "No. of poor at $1.90 a day (millions)";
     }
 	else if(choice == 1) {
 		curColor = colorPopDens;
-        xDomain = [0, 1000]
+        xDomain = [1, 1000]
+        legendText = "Population per square km";
     }
     else if(choice == 2) {
         
@@ -111,7 +114,7 @@ function CreateLegend() {
 		.attr("fill", "#000")
 		.attr("text-anchor", "start")
 		.attr("font-weight", "bold")
-		.text("Population per square km");
+		.text(legendText);
 
 	legendCont.call(d3.axisBottom(x)
 		.tickSize(13)
