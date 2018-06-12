@@ -8,6 +8,8 @@ var AREA = "Area";
 var POP_DENS = "PopulationDensity";
 var POV = "Poverty";
 var GINI = "Gini";
+var HDI = "HDI";
+var LifeEx = "LifeExpectancy";
 // End statics
 
 //Define Margin
@@ -53,6 +55,14 @@ var colorGini = d3.scaleThreshold()
     .domain([10, 20, 30, 40, 50, 100])
     .range(d3.schemeRdPu[6]);
 
+var colorHDI = d3.scaleThreshold()
+    .domain([0, 0.1, 0.3, 0.6, 1])
+    .range(d3.schemeRdPu[5]);
+
+var colorLifeExpectancy = d3.scaleThreshold()
+    .domain([10, 20, 30, 40, 50, 100])
+    .range(d3.schemeRdPu[6]);
+
 // The variable we're displaying on the map. Default to population density
 var choice = 0;
 // The current year we're displaying (this should actually probably be [0,20]
@@ -77,10 +87,13 @@ function CreateLegend() {
         legendText = "Population per square km";
     }
     else if(choice == 2) {
-        
+        curColor = colorHDI;
+        xDomain = [0, 1.0];
     }
     else if(choice == 3) {
-        
+        curColor = colorLifeExpectancy;
+        xDomain = [1, 100];
+        legendText = "Life expectancy at birth";
     }
 	else if(choice == 4) {
 		curColor = colorGini;
@@ -91,7 +104,7 @@ function CreateLegend() {
     
 	var x = d3.scaleSqrt()
 		.domain(xDomain)
-		.rangeRound([0, legendWidth*0.95]);
+		.range([0, legendWidth*0.95]);
 
 
         legendCont.selectAll("rect")
@@ -203,6 +216,40 @@ function AfricaGini(data) {
     });
 }
 
+function AfricaHDI(data) {
+    data.forEach(function(d) {
+        var cou = d.Country.trim();
+        if(cou in countryData) {
+            // Load the population data into an array for saving
+            var hdi = [];
+            for(var i = 0; i < YEARS.length; ++i) {
+                if(d[YEARS[i]] != ".." && d[YEARS[i]] != "")
+                    hdi.push(+d[YEARS[i]])
+                else
+                    hdi.push(-1);
+            }
+            countryData[cou][HDI] = hdi;
+        }
+    });
+}
+
+function AfricaLifeExpectancy(data) {
+    data.forEach(function(d) {
+        var cou = d.Country.trim();
+        if(cou in countryData) {
+            // Load the population data into an array for saving
+            var le = [];
+            for(var i = 0; i < YEARS.length; ++i) {
+                if(d[YEARS[i]] != ".." && d[YEARS[i]] != "")
+                    le.push(+d[YEARS[i]])
+                else
+                    le.push(-1);
+            }
+            countryData[cou][LifeEx] = le;
+        }
+    });
+}
+
 // Save the geoJson data so we can use it later without re-reading the file
 var geoData = null;
 // Load the geojson data and draw it
@@ -226,8 +273,10 @@ d3.queue()
     .defer(d3.csv, "data/AfricaArea.csv")
     .defer(d3.csv, "data/NumberOfPoor.csv")
     .defer(d3.csv, "data/GiniData.csv")
+    .defer(d3.csv, "data/HDI.csv")
+    .defer(d3.csv, "data/LifeExpectancy.csv")
     .defer(d3.json, "data/GeoAfrica.json")
-    .await(function(error, csvAfricaPopulation, csvAfricaArea, csvNumberOfPoor, csvGini, jsonAfrica) {
+    .await(function(error, csvAfricaPopulation, csvAfricaArea, csvNumberOfPoor, csvGini, csvHDI, csvLifeExpect, jsonAfrica) {
         if(error) { console.error(error); }
         else {
             // This is after all the csv files have been loaded, so call the processing functions
@@ -235,6 +284,8 @@ d3.queue()
             AfricaArea(csvAfricaArea);
             AfricaPopulationDensity();
             AfricaPoverty(csvNumberOfPoor);
+            AfricaHDI(csvHDI);
+            AfricaLifeExpectancy(csvLifeExpect);
             AfricaGini(csvGini);
             
             CreateLegend();
@@ -268,7 +319,7 @@ function countryFill(name) {
     }
     var scaleVariable = null;
     
-    if(choice == 0) {
+    if(choice == 0) { // Poverty rate
 		if(countryData[name][POV] == -1 || countryData[name][POV] == null) {
 			//console.log("ERR: POV undefined for " + name);
 			return NO_DATA;
@@ -277,16 +328,31 @@ function countryFill(name) {
 			scaleVariable = colorPov(countryData[name][POV][year]);
 		}
 	}
-    else if(choice == 1) {
+    else if(choice == 1) { // Population density
 		if(countryData[name][POP_DENS] == -1) {
-			//console.log("ERR: POP_DENS undefined for " + name);
 			return NO_DATA;
 		}
 		else {
 			scaleVariable = colorPopDens(countryData[name][POP_DENS][year]);
 		}
     }
-	else if(choice == 4) {
+    else if(choice == 2) { // HDI
+        if(countryData[name][HDI] == -1 || !(HDI in countryData[name])) {
+			return NO_DATA;
+		}
+		else {
+			scaleVariable = colorHDI(countryData[name][HDI][year]);
+		}
+    }
+    else if(choice == 3) { // Life Expectancy
+        if(countryData[name][LifeEx] == -1 || !(LifeEx in countryData[name])) {
+			return NO_DATA;
+		}
+		else {
+			scaleVariable = colorLifeExpectancy(countryData[name][LifeEx][year]);
+		}
+    }
+	else if(choice == 4) { // Gini coefficient
 		if(countryData[name][GINI] == -1 || countryData[name][GINI] == null) {
 			return NO_DATA;
 		}
