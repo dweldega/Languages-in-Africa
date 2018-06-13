@@ -32,11 +32,11 @@ var legendCont = svg.append("g")
     .attr("class", ".legend-container")
     .attr("width", legendWidth)
     .attr("height", legendHeight)
-    .attr("transform", "translate(400, -20)");
+    .attr("transform", "translate(550, -40)");
     
 // Define the scales
 var projection = d3.geoMercator()
-    .scale(300)
+    .scale(350)
     .center([18, 1])
     .translate([width / 2, height / 2]);
 
@@ -53,7 +53,7 @@ var colorPov = d3.scaleThreshold()
 
 var colorGini = d3.scaleThreshold()
     .domain([10, 20, 30, 40, 50, 100])
-    .range(d3.schemeRdPu[6]);
+    .range(d3.schemeYlOrRd[6]);
 
 var colorHDI = d3.scaleThreshold()
     .domain([0, 0.1, 0.3, 0.6, 1])
@@ -61,7 +61,9 @@ var colorHDI = d3.scaleThreshold()
 
 var colorLifeExpectancy = d3.scaleThreshold()
     .domain([10, 20, 30, 40, 50, 100])
-    .range(d3.schemeRdPu[6]);
+    .range(d3.schemeYlGnBu[6]);
+
+
 
 // The variable we're displaying on the map. Default to population density
 var choice = 0;
@@ -78,7 +80,7 @@ function CreateLegend() {
     
 	if(choice == 0) {
 		curColor = colorPov;
-        xDomain = [0, 100]
+        xDomain = [1, 100]
         legendText = "No. of poor at $1.90 a day (millions)";
     }
 	else if(choice == 1) {
@@ -89,6 +91,7 @@ function CreateLegend() {
     else if(choice == 2) {
         curColor = colorHDI;
         xDomain = [0, 1.0];
+        legendText = "Human Development Index (HDI)";
     }
     else if(choice == 3) {
         curColor = colorLifeExpectancy;
@@ -268,6 +271,7 @@ function GeoAfrica(data) {
         .attr("stroke-width", 1);
 }
 
+
 d3.queue()
     .defer(d3.csv, "data/AfricaPopulation.csv")
     .defer(d3.csv, "data/AfricaArea.csv")
@@ -300,6 +304,22 @@ d3.selectAll("input[type=radio]").on("change", function(){
     updateGeoAfrica(geoData);
     CreateLegend();
 });
+
+//var step = 0;
+//var YEAR = 1998;
+//var filename = ("data" + current_year + ".csv").toString();
+//
+//display(current_year);
+//
+//d3.select("slider").on('change', function(d) {       
+//       var incrementation = parseInt(this.value);
+//       current_year = (1998 + incrementation);
+//       d3.select("year").text(""+current_year);
+//       svg.selectAll("path").remove();
+//       svg.selectAll(".dot").remove();
+//       return display(current_year);
+//});
+
 d3.selectAll("input[type=range]").on("change", function() {
 	year = this.value;
 	updateGeoAfrica(geoData);
@@ -308,6 +328,7 @@ d3.selectAll("input[type=range]").on("input", function() {
 	year = this.value;
 	updateGeoAfrica(geoData);
 });
+
 
 
 function countryFill(name) {
@@ -363,6 +384,8 @@ function countryFill(name) {
     
     return scaleVariable;
 }
+
+
 
 // Updates happen here onwards
 function updateGeoAfrica() {
