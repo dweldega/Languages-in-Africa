@@ -32,11 +32,11 @@ var legendCont = svg.append("g")
     .attr("class", ".legend-container")
     .attr("width", legendWidth)
     .attr("height", legendHeight)
-    .attr("transform", "translate(400, -20)");
+    .attr("transform", "translate(550, -40)");
     
 // Define the scales
 var projection = d3.geoMercator()
-    .scale(300)
+    .scale(350)
     .center([18, 1])
     .translate([width / 2, height / 2]);
 
@@ -93,6 +93,7 @@ function CreateLegend() {
         curColor = colorHDI;
         x = d3.scaleLinear();
         decFormat = ".1f";
+        legendText = "Human Development Index (HDI)";
     }
     else if(choice == 3) {
         curColor = colorLifeExpectancy;
@@ -270,6 +271,7 @@ function GeoAfrica(data) {
         .attr("stroke-width", 1);
 }
 
+
 d3.queue()
     .defer(d3.csv, "data/AfricaPopulation.csv")
     .defer(d3.csv, "data/AfricaArea.csv")
@@ -302,6 +304,22 @@ d3.selectAll("input[type=radio]").on("change", function(){
     updateGeoAfrica(geoData);
     CreateLegend();
 });
+
+//var step = 0;
+//var YEAR = 1998;
+//var filename = ("data" + current_year + ".csv").toString();
+//
+//display(current_year);
+//
+//d3.select("slider").on('change', function(d) {       
+//       var incrementation = parseInt(this.value);
+//       current_year = (1998 + incrementation);
+//       d3.select("year").text(""+current_year);
+//       svg.selectAll("path").remove();
+//       svg.selectAll(".dot").remove();
+//       return display(current_year);
+//});
+
 d3.selectAll("input[type=range]").on("change", function() {
 	year = this.value;
 	updateGeoAfrica(geoData);
@@ -310,6 +328,7 @@ d3.selectAll("input[type=range]").on("input", function() {
 	year = this.value;
 	updateGeoAfrica(geoData);
 });
+
 
 
 function countryFill(name) {
@@ -365,6 +384,8 @@ function countryFill(name) {
     
     return scaleVariable;
 }
+
+
 
 // Updates happen here onwards
 function updateGeoAfrica() {
