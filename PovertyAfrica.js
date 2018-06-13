@@ -44,24 +44,25 @@ var path = d3.geoPath()
     .projection(projection);
 
 var colorPopDens = d3.scaleThreshold()
-    .domain([1, 10, 50, 200, 500, 1000])
+    .domain([1, 10, 30, 70, 200, 500])
     .range(d3.schemeYlGn[6]);
 
 var colorPov = d3.scaleThreshold()
-    .domain([0, 1, 20, 50, 100])
-    .range(d3.schemeOrRd[5]);
+    .domain([0, 0.1, 0.3, 0.5, 0.7, 0.9, 1])
+//    .domain([0, 1, 5, 10,20, 50])
+    .range(d3.schemeOrRd[7]);
 
 var colorGini = d3.scaleThreshold()
-    .domain([10, 20, 30, 40, 50, 100])
-    .range(d3.schemeRdPu[6]);
+    .domain([20, 30, 40, 50, 70, 100])
+    .range(d3.schemeYlOrRd[6]);
 
 var colorHDI = d3.scaleThreshold()
-    .domain([0, 0.1, 0.3, 0.6, 1])
+    .domain([0.2, 0.3, 0.5, 0.7, 0.9])
     .range(d3.schemeRdPu[5]);
 
 var colorLifeExpectancy = d3.scaleThreshold()
-    .domain([10, 20, 30, 40, 50, 100])
-    .range(d3.schemeRdPu[6]);
+    .domain([30, 40, 50, 60, 70, 80])
+    .range(d3.schemeYlGn[6]);
 
 // The variable we're displaying on the map. Default to population density
 var choice = 0;
@@ -73,41 +74,40 @@ function CreateLegend() {
 	var curColor = null;
 	
 	legendCont.html("");
-	var xDomain = [0, 1000];
     var legendText = "";
+    
+    var x = d3.scaleSqrt();
+    var decFormat = ".0f";
     
 	if(choice == 0) {
 		curColor = colorPov;
-        xDomain = [0, 100]
-        legendText = "No. of poor at $1.90 a day (millions)";
+        x = d3.scaleLinear();
+        decFormat = ".1f";
+        legendText = "% of population below $1.90 a day";
     }
 	else if(choice == 1) {
 		curColor = colorPopDens;
-        xDomain = [1, 1000]
         legendText = "Population per square km";
     }
     else if(choice == 2) {
         curColor = colorHDI;
-        xDomain = [0, 1.0];
+        x = d3.scaleLinear();
+        decFormat = ".1f";
     }
     else if(choice == 3) {
         curColor = colorLifeExpectancy;
-        xDomain = [1, 100];
         legendText = "Life expectancy at birth";
     }
 	else if(choice == 4) {
 		curColor = colorGini;
-        xDomain = [10, 100]
     }
     
-	// TODO: Change domain with choice
-    
-	var x = d3.scaleSqrt()
-		.domain(xDomain)
-		.range([0, legendWidth*0.95]);
+    x.range([0, legendWidth*0.95])
+        .domain([curColor.domain()[0], curColor.domain()[curColor.domain().length-1]]);
+	
 
 
-        legendCont.selectAll("rect")
+    legendCont.selectAll("rect")
         .data(curColor.range().map(function(d) {
             d = curColor.invertExtent(d);
             if (d[0] == null) d[0] = x.domain()[0];
@@ -131,7 +131,8 @@ function CreateLegend() {
 
 	legendCont.call(d3.axisBottom(x)
 		.tickSize(13)
-		.tickValues(curColor.domain()))
+		.tickValues(curColor.domain())
+        .tickFormat(function (d) { return d3.format(decFormat)(d); }))
 		.select(".domain")
 		.remove();
 }
@@ -194,11 +195,12 @@ function AfricaPoverty(data) {
         var pov = [];
         for(var i = 0; i < YEARS.length; ++i) {
             if(d[YEARS[i]] != "..")
-				pov.push(+d[YEARS[i]])
+				pov.push((+d[YEARS[i]]*1000000) / countryData[d.Country][POP][i])
 			else
 				pov.push(-1);
         }
         countryData[d.Country][POV] = pov;
+        console.log(pov);
     });
 }
 
