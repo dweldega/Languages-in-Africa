@@ -201,7 +201,6 @@ function AfricaPoverty(data) {
 				pov.push(-1);
         }
         countryData[d.Country][POV] = pov;
-        console.log(pov);
     });
 }
 
@@ -393,5 +392,6 @@ function updateGeoAfrica() {
     // Taken from http://bl.ocks.org/almccon/fe445f1d6b177fd0946800a48aa59c71
     svg.selectAll('path')
         .attr("fill", function(d) { return countryFill(d.properties.brk_name); });
+    d3.select(".yearVal").html(YEARS[year]);
 }
 
