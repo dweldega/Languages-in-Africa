@@ -2,7 +2,7 @@ body {
     
 }
 
-h1 {
+h1, h4 {
 	text-align: center;
 }
 .project-container {
@@ -43,5 +43,10 @@ h1 {
 
 
 .project-description {
-	width: 50%;
+	width: auto;
+    margin-left:10%;
+}
+
+th {
+    padding-right:30px;
 }
