@@ -1,2 +1,2 @@
-# Languages-in-Africa
-A data visualization of the different languages spoken in Africa
+# Poverty-in-Africa
+https://dweldega.github.io/Poverty-in-Africa/
