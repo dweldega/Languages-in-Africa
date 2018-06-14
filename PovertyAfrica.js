@@ -323,13 +323,13 @@ function GeoAfrica(data) {
 
 
 d3.queue()
-    .defer(d3.csv, "data/AfricaPopulation.csv")
-    .defer(d3.csv, "data/AfricaArea.csv")
-    .defer(d3.csv, "data/NumberOfPoor.csv")
-    .defer(d3.csv, "data/GiniData.csv")
-    .defer(d3.csv, "data/HDI.csv")
-    .defer(d3.csv, "data/LifeExpectancy.csv")
-    .defer(d3.json, "data/GeoAfrica.json")
+    .defer(d3.csv, "AfricaPopulation.csv")
+    .defer(d3.csv, "AfricaArea.csv")
+    .defer(d3.csv, "NumberOfPoor.csv")
+    .defer(d3.csv, "GiniData.csv")
+    .defer(d3.csv, "HDI.csv")
+    .defer(d3.csv, "LifeExpectancy.csv")
+    .defer(d3.json, "GeoAfrica.json")
     .await(function(error, csvAfricaPopulation, csvAfricaArea, csvNumberOfPoor, csvGini, csvHDI, csvLifeExpect, jsonAfrica) {
         if(error) { console.error(error); }
         else {
