@@ -12,19 +12,18 @@
         <link rel="stylesheet" type="text/css" href="PovertyAfrica.css">
     </head>
     <body onload="btnForm.reset();">
-        <div class="staticTooltip">
-            <p><br>Country:</p>
-            <p>Population:</p>
-            <p>Poverty Rate:</p>
-            <p>HDI:</p>
-            <p>Life Expectancy:</p>
-            <p>Gini Coefficient:</p>
-            <p>Population Density:</p>
-        </div>
         <h1>Poverty and HDI in Africa</h1>
         <h4>Story here</h4>
         <div class='project-container'>
-            <!--<div class='legend-container'></div>-->
+            <div class="staticTooltip hidden">
+				<p>Country: <span class="ttValues" id="ttCountry"></span></p>
+				<p>Population: <span class="ttValues"  id="ttPop"></span></p>
+				<p>Poverty Rate: <span class="ttValues"  id="ttPov"></span></p>
+				<p>HDI: <span class="ttValues"  id="ttHDI"></span></p>
+				<p>Life Expectancy: <span class="ttValues"  id="ttLifeEx"></span></p>
+				<p>Gini Coefficient: <span class="ttValues"  id="ttGini"></span></p>
+				<p>Population Density: <span class="ttValues"  id="ttPopDens"></span></p>
+			</div>
             <div class='svgContainer'></div>
             <div class='slider-container'>
                 <label class="year" type="updateYR">Data shown for: <span class="yearVal" id = "update">1998</span></label>

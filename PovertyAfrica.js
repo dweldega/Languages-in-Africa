@@ -26,15 +26,6 @@ var svg = d3.select(".svgContainer").append("svg")
     .append("g")
     .attr("transform", "translate(" + (margin.left-100) + "," + margin.top + ")");
 
-//d3.select("body").append("div")
-//    .attr("postion", "absolute")
-//    .attr("width", "100px")
-//    .attr("height", "10px")
-//    .attr("class", "tooltip")
-//    .attr("top", "100px")
-//    .attr("left", "100px")
-//    .text("HI");
-
 var legendWidth = 400;
 var legendHeight = 50;
 var legendCont = svg.append("g")
@@ -52,9 +43,11 @@ var projection = d3.geoMercator()
 var path = d3.geoPath()
     .projection(projection);
 
+// From https://github.com/d3/d3-scale-chromatic
+// From https://bl.ocks.org/mbostock/5562380
 var colorPopDens = d3.scaleThreshold()
     .domain([1, 10, 30, 70, 200, 500])
-    .range(d3.schemeYlGn[6]);
+    .range(d3.schemeBlues[6]);
 
 var colorPov = d3.scaleThreshold()
     .domain([0, 0.1, 0.3, 0.5, 0.7, 0.9, 1])
@@ -132,11 +125,10 @@ function CreateLegend() {
 
 	legendCont.append("text")
 		.attr("class", "caption")
-		.attr("x", 30)
+		.attr("x", 100)
 		.attr("y", 35)
-        .attr("text-anchor", "right")
+        .attr("text-anchor", "start")
 		.attr("fill", "#000")
-		.attr("text-anchor", "start")
 		.attr("font-weight", "bold")
 		.text(legendText);
 
@@ -206,7 +198,7 @@ function AfricaPoverty(data) {
         var pov = [];
         for(var i = 0; i < YEARS.length; ++i) {
             if(d[YEARS[i]] != "..")
-				pov.push((+d[YEARS[i]]*1000000) / countryData[d.Country][POP][i])
+				pov.push((+d[YEARS[i]]*1000000) / countryData[d.Country][POP][i]);
 			else
 				pov.push(-1);
         }
@@ -279,18 +271,46 @@ function GeoAfrica(data) {
         .attr("stroke","black")
         .attr("stroke-width", 1)
         .on("mouseover", function(d) {
-           
-                var Country = d.properties.brk_name;
-                var Country = d.properties.brk_name;
-                var Country = d.properties.brk_name;
-                var Country = d.properties.brk_name;
-                var Country = d.properties.brk_name;
-                var Country = d.properties.brk_name;
+					var Country = d.properties.brk_name;
                     //Update the tooltip position and value
-                    d3.select(".staticTooltip")						
-                       // .select("#value")
-                        .html('<b>Country:</b> ' + Country + '<br/><b>Population:</b> ' + countryData[Country][POP][year] + '<br/><b>Poverty Rate:</b> ' + countryData[Country][POV][year] + '<br/><b>HDI:</b> ' + countryData[Country][HDI][year]+ '<br/><b>Life Expectancy:</b> ' + countryData[Country][LifeEx][year] + '<br/><b>Gini Coeficient:</b> ' + countryData[Country][GINI][year] + '<br/><b>Population Density:</b> ' + countryData[Country][POP_DENS][year]);
-
+                    var fNonPop = d3.format(".2f");
+                    var fPop = d3.format(",.0f");
+                    
+                    var pop = fPop(countryData[Country][POP][year]);
+                    var pov = 0;
+                    var hdi = 0;
+                    var lifeEx = 0;
+                    var gini = 0;
+                    var popDens = fNonPop(countryData[Country][POP_DENS][year]);
+                    
+                    if(POV in countryData[Country] && countryData[Country][POV][year] != -1)
+						pov = fPop(countryData[Country][POV][year]*100) + "%";
+					else
+						pov = "N/A";
+						
+					if(HDI in countryData[Country] && countryData[Country][HDI][year] != -1)
+						hdi = fNonPop(countryData[Country][HDI][year]);
+                    else
+						hdi = "N/A";
+						
+                    if(LifeEx in countryData[Country] && countryData[Country][LifeEx][year] != -1)
+						lifeEx = fNonPop(countryData[Country][LifeEx][year]);
+					else
+						lifeEx = "N/A";
+					
+					if(GINI in countryData[Country] && countryData[Country][GINI][year] != -1)
+						gini = fNonPop(countryData[Country][GINI][year]);
+					else
+						gini = "N/A";
+						
+					d3.select("#ttCountry").html(Country);
+                    d3.select("#ttPop").html(pop);
+					d3.select("#ttPov").html(pov);
+					d3.select("#ttHDI").html(hdi);
+					d3.select("#ttLifeEx").html(lifeEx);
+					d3.select("#ttGini").html(gini);
+                    d3.select("#ttPopDens").html(popDens);
+					
                     //Show the tooltip
                     d3.select(".staticTooltip").classed("hidden", false);
                })
@@ -335,21 +355,6 @@ d3.selectAll("input[type=radio]").on("change", function(){
     CreateLegend();
 });
 
-//var step = 0;
-//var YEAR = 1998;
-//var filename = ("data" + current_year + ".csv").toString();
-//
-//display(current_year);
-//
-//d3.select("slider").on('change', function(d) {       
-//       var incrementation = parseInt(this.value);
-//       current_year = (1998 + incrementation);
-//       d3.select("year").text(""+current_year);
-//       svg.selectAll("path").remove();
-//       svg.selectAll(".dot").remove();
-//       return display(current_year);
-//});
-
 d3.selectAll("input[type=range]").on("change", function() {
 	year = this.value;
 	updateGeoAfrica(geoData);
@@ -371,7 +376,7 @@ function countryFill(name) {
     var scaleVariable = null;
     
     if(choice == 0) { // Poverty rate
-		if(countryData[name][POV] == -1 || countryData[name][POV] == null) {
+		if(countryData[name][POV] == null || countryData[name][POV][year] == -1) {
 			//console.log("ERR: POV undefined for " + name);
 			return NO_DATA;
 		}
@@ -380,7 +385,7 @@ function countryFill(name) {
 		}
 	}
     else if(choice == 1) { // Population density
-		if(countryData[name][POP_DENS] == -1) {
+		if(countryData[name][POP_DENS][year] == -1) {
 			return NO_DATA;
 		}
 		else {
@@ -388,7 +393,7 @@ function countryFill(name) {
 		}
     }
     else if(choice == 2) { // HDI
-        if(countryData[name][HDI] == -1 || !(HDI in countryData[name])) {
+        if(!(HDI in countryData[name]) || countryData[name][HDI][year] == -1) {
 			return NO_DATA;
 		}
 		else {
@@ -396,7 +401,7 @@ function countryFill(name) {
 		}
     }
     else if(choice == 3) { // Life Expectancy
-        if(countryData[name][LifeEx] == -1 || !(LifeEx in countryData[name])) {
+        if(!(LifeEx in countryData[name]) || countryData[name][LifeEx][year] == -1) {
 			return NO_DATA;
 		}
 		else {
@@ -404,7 +409,7 @@ function countryFill(name) {
 		}
     }
 	else if(choice == 4) { // Gini coefficient
-		if(countryData[name][GINI] == -1 || countryData[name][GINI] == null) {
+		if(countryData[name][GINI] == null || countryData[name][GINI][year] == -1) {
 			return NO_DATA;
 		}
 		else {
@@ -420,7 +425,6 @@ function countryFill(name) {
 // Updates happen here onwards
 function updateGeoAfrica() {
     // Draw each province as a path
-    // Taken from http://bl.ocks.org/almccon/fe445f1d6b177fd0946800a48aa59c71
     svg.selectAll('path')
         .attr("fill", function(d) { return countryFill(d.properties.brk_name); });
     d3.select(".yearVal").html(YEARS[year]);
