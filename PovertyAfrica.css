@@ -46,9 +46,6 @@ h1, h4 {
 	width: auto;
     margin-left:10%;
 }
-.caption{
-    padding-left:50%;
-}
 .staticTooltip{
     background-color: #ece7f2;
     position: absolute;

@@ -54,7 +54,7 @@ var path = d3.geoPath()
 
 var colorPopDens = d3.scaleThreshold()
     .domain([1, 10, 30, 70, 200, 500])
-    .range(d3.schemeYlGn[6]);
+    .range(d3.schemeBlues[6]);
 
 var colorPov = d3.scaleThreshold()
     .domain([0, 0.1, 0.3, 0.5, 0.7, 0.9, 1])
@@ -132,11 +132,10 @@ function CreateLegend() {
 
 	legendCont.append("text")
 		.attr("class", "caption")
-		.attr("x", 30)
+		.attr("x", 100)
 		.attr("y", 35)
-        .attr("text-anchor", "right")
+        .attr("text-anchor", "start")
 		.attr("fill", "#000")
-		.attr("text-anchor", "start")
 		.attr("font-weight", "bold")
 		.text(legendText);
 
@@ -291,8 +290,6 @@ function GeoAfrica(data) {
                     var gini = 0;
                     var popDens = fNonPop(countryData[Country][POP_DENS][year]);
                     
-                    
-                    
                     if(POV in countryData[Country] && countryData[Country][POV][year] != -1)
 						pov = fPop(countryData[Country][POV][year]*100) + "%";
 					else
@@ -386,7 +383,7 @@ function countryFill(name) {
     var scaleVariable = null;
     
     if(choice == 0) { // Poverty rate
-		if(countryData[name][POV] == -1 || countryData[name][POV] == null) {
+		if(countryData[name][POV] == null || countryData[name][POV][year] == -1) {
 			//console.log("ERR: POV undefined for " + name);
 			return NO_DATA;
 		}
@@ -395,7 +392,7 @@ function countryFill(name) {
 		}
 	}
     else if(choice == 1) { // Population density
-		if(countryData[name][POP_DENS] == -1) {
+		if(countryData[name][POP_DENS][year] == -1) {
 			return NO_DATA;
 		}
 		else {
@@ -403,7 +400,7 @@ function countryFill(name) {
 		}
     }
     else if(choice == 2) { // HDI
-        if(countryData[name][HDI] == -1 || !(HDI in countryData[name])) {
+        if(!(HDI in countryData[name]) || countryData[name][HDI][year] == -1) {
 			return NO_DATA;
 		}
 		else {
@@ -411,7 +408,7 @@ function countryFill(name) {
 		}
     }
     else if(choice == 3) { // Life Expectancy
-        if(countryData[name][LifeEx] == -1 || !(LifeEx in countryData[name])) {
+        if(!(LifeEx in countryData[name]) || countryData[name][LifeEx][year] == -1) {
 			return NO_DATA;
 		}
 		else {
@@ -419,7 +416,7 @@ function countryFill(name) {
 		}
     }
 	else if(choice == 4) { // Gini coefficient
-		if(countryData[name][GINI] == -1 || countryData[name][GINI] == null) {
+		if(countryData[name][GINI] == null || countryData[name][GINI][year] == -1) {
 			return NO_DATA;
 		}
 		else {
