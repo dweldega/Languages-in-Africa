@@ -47,6 +47,19 @@ h1, h4 {
     background-color: aliceblue;
     
 }
+
+.details {
+	background-color: #ece7f2;
+	width: 400px;
+	position: absolute;
+	top: 170px;
+	left: 80px;
+	text-align:left;
+	padding: 5px 5px 5px 5px;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
 .staticTooltip{
     background-color: #ece7f2;
     position: absolute;
