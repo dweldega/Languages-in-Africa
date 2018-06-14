@@ -29,11 +29,11 @@ var svg = d3.select(".svgContainer").append("svg")
 var legendWidth = 400;
 var legendHeight = 50;
 var legendCont = svg.append("g")
-    .attr("class", ".legend-container")
+    .attr("class", "legend-container")
     .attr("width", legendWidth)
     .attr("height", legendHeight)
     .attr("transform", "translate(550, -40)");
-    
+
 // Define the scales
 var projection = d3.geoMercator()
     .scale(350)
