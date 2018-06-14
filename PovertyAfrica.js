@@ -279,18 +279,31 @@ function GeoAfrica(data) {
         .attr("stroke","black")
         .attr("stroke-width", 1)
         .on("mouseover", function(d) {
-           
-                var Country = d.properties.brk_name;
-                var Country = d.properties.brk_name;
-                var Country = d.properties.brk_name;
-                var Country = d.properties.brk_name;
-                var Country = d.properties.brk_name;
-                var Country = d.properties.brk_name;
+					var Country = d.properties.brk_name;
                     //Update the tooltip position and value
-                    d3.select(".staticTooltip")						
-                       // .select("#value")
-                        .html('<b>Country:</b> ' + Country + '<br/><b>Population:</b> ' + countryData[Country][POP][year] + '<br/><b>Poverty Rate:</b> ' + countryData[Country][POV][year] + '<br/><b>HDI:</b> ' + countryData[Country][HDI][year]+ '<br/><b>Life Expectancy:</b> ' + countryData[Country][LifeEx][year] + '<br/><b>Gini Coeficient:</b> ' + countryData[Country][GINI][year] + '<br/><b>Population Density:</b> ' + countryData[Country][POP_DENS][year]);
-
+                    var fNonPop = d3.format(".2f");
+                    var fPop = d3.format(",.0f");
+                    
+                    d3.select(".ttCountry").html(Country);
+                    d3.select(".ttPop").html(fPop(countryData[Country][POP][year]));
+                    
+                    if(POV in countryData[Country])
+						d3.select(".ttPov").html(fNonPop(countryData[Country][POV][year]));
+					else
+						d3.select(".ttPov").html("N/A");
+                    d3.select(".ttHDI").html(fNonPop(countryData[Country][HDI][year]));
+                    
+                    if(LifeEx in countryData[Country])
+						d3.select(".ttLifeEx").html(fNonPop(countryData[Country][LifeEx][year]));
+					else
+						d3.select(".ttPov").html("N/A");
+					
+					if(GINI in countryData[Country])
+						d3.select(".ttGini").html(fNonPop(countryData[Country][GINI][year]));
+					else
+						d3.select(".ttPov").html("N/A");
+                    d3.select(".ttPopDens").html(fNonPop(countryData[Country][POP_DENS][year]));
+					
                     //Show the tooltip
                     d3.select(".staticTooltip").classed("hidden", false);
                })
@@ -334,21 +347,6 @@ d3.selectAll("input[type=radio]").on("change", function(){
     updateGeoAfrica(geoData);
     CreateLegend();
 });
-
-//var step = 0;
-//var YEAR = 1998;
-//var filename = ("data" + current_year + ".csv").toString();
-//
-//display(current_year);
-//
-//d3.select("slider").on('change', function(d) {       
-//       var incrementation = parseInt(this.value);
-//       current_year = (1998 + incrementation);
-//       d3.select("year").text(""+current_year);
-//       svg.selectAll("path").remove();
-//       svg.selectAll(".dot").remove();
-//       return display(current_year);
-//});
 
 d3.selectAll("input[type=range]").on("change", function() {
 	year = this.value;

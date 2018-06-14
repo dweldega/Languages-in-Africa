@@ -50,15 +50,15 @@ h1, h4 {
     padding-left:50%;
 }
 .staticTooltip{
-    background-color: #ece7f2
-        ;
+    background-color: #ece7f2;
     position: absolute;
     top: 350px;
     left:80px;
     width: 250px;
     height: 250px;
     text-align:left;
-    padding-right:30px;
+    padding-left:5px;
+    padding-top:5px;
 }
 th {
     padding-right:30px;
