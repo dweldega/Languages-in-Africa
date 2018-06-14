@@ -60,7 +60,9 @@ h1, h4 {
     padding-right:5px;
     
     border-radius:10px;
+    -webkit-border-radius: 10px;
     box-shadow:2px 2px;
+    -webkit-box-shadow:2px 2px;
 }
 
 .staticTooltip p {
@@ -77,74 +79,74 @@ th {
 }
 
 
+#inds{
+	position:absolute;
+	top:200px;
+	left:1180px;
+}
+* {
+	box-sizing: border-box;
+}
 
-          #inds{
-            position:absolute;
-        top:200px;
-        left:1180px;
-        }
-        * {
-            box-sizing: border-box;
-        }
-    
-        /* Create three equal columns that floats next to each other */
-        .column {
-            float: left;
-            padding: 0px;
-        }
-        .left, .right {
-            width: 25%;
-        }
-        .middle1, .middle2 {
-            width: 25%;
-        }
+/* Create three equal columns that floats next to each other */
+.column {
+	float: left;
+	padding: 0px;
+}
 
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-        .author {
-            line-height: 1;
-            }
-         #chart{
-                position:absolute;
-            }
-        #note{
-                position:relative;
-               
-                
-            }
-        
-        .line {
-          fill: none;
-          stroke: #EF5285;
-          stroke-width: 2px;
-        }
-        #annotation {
-          position:relative;
-          stroke:	#00FFFF;
-          stroke-width: 2px;
-          width: 600px;
-          bottom: 600px;
-          left:70px;
-        Padding-top:30px;
+.left, .right {
+	width: 25%;
+}
 
-        
-         
-        }
+.middle1, .middle2 {
+	width: 25%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.author {
+	line-height: 1;
+}
+
+#chart{
+	position:absolute;
+}
+
+#note{
+	position:relative;
 
 
-        #annotation_1 {
-          position: absolute;
-          stroke:	#00FFFF;
-         font-size:15px;
-          stroke-width: 2px;
-          width: 420px;
-          bottom: 70px;
-            left:1100px;
-            padding:30px;
-          
-            
+}
 
+.line {
+	fill: none;
+	stroke: #EF5285;
+	stroke-width: 2px;
+}
+	
+#annotation {
+	position:relative;
+	stroke:	#00FFFF;
+	stroke-width: 2px;
+	width: 600px;
+	bottom: 600px;
+	left:70px;
+	Padding-top:30px;
+}
+
+
+#annotation_1 {
+	position: absolute;
+	stroke:	#00FFFF;
+	font-size:15px;
+	stroke-width: 2px;
+	width: 420px;
+	bottom: 70px;
+	left:1100px;
+	padding:30px;
+}
