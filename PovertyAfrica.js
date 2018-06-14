@@ -277,7 +277,28 @@ function GeoAfrica(data) {
         .attr('d', path)
         .attr("fill", function(d) { return countryFill(d.properties.brk_name); })
         .attr("stroke","black")
-        .attr("stroke-width", 1);
+        .attr("stroke-width", 1)
+        .on("mouseover", function(d) {
+           
+                var Country = d.properties.brk_name;
+                var Country = d.properties.brk_name;
+                var Country = d.properties.brk_name;
+                var Country = d.properties.brk_name;
+                var Country = d.properties.brk_name;
+                var Country = d.properties.brk_name;
+                    //Update the tooltip position and value
+                    d3.select(".staticTooltip")						
+                       // .select("#value")
+                        .html('<b>Country:</b> ' + Country + '<br/><b>Population:</b> ' + countryData[Country][POP][year] + '<br/><b>Poverty Rate:</b> ' + countryData[Country][POV][year] + '<br/><b>HDI:</b> ' + countryData[Country][HDI][year]+ '<br/><b>Life Expectancy:</b> ' + countryData[Country][LifeEx][year] + '<br/><b>Gini Coeficient:</b> ' + countryData[Country][GINI][year] + '<br/><b>Population Density:</b> ' + countryData[Country][POP_DENS][year]);
+
+                    //Show the tooltip
+                    d3.select(".staticTooltip").classed("hidden", false);
+               })
+               .on("mouseout", function() {
+                    //Hide the tooltip
+                    d3.select(".staticTooltip").classed("hidden", true);
+               });            
+                
 }
 
 
