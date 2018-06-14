@@ -44,7 +44,8 @@ h1, h4 {
 
 .project-description {
 	width: auto;
-    margin-left:10%;
+    background-color: aliceblue;
+    
 }
 .caption{
     padding-left:50%;
@@ -63,3 +64,76 @@ h1, h4 {
 th {
     padding-right:30px;
 }
+
+
+
+          #inds{
+            position:absolute;
+        top:200px;
+        left:1180px;
+        }
+        * {
+            box-sizing: border-box;
+        }
+    
+        /* Create three equal columns that floats next to each other */
+        .column {
+            float: left;
+            padding: 0px;
+        }
+        .left, .right {
+            width: 25%;
+        }
+        .middle1, .middle2 {
+            width: 25%;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .author {
+            line-height: 1;
+            }
+         #chart{
+                position:absolute;
+            }
+        #note{
+                position:relative;
+               
+                
+            }
+        
+        .line {
+          fill: none;
+          stroke: #EF5285;
+          stroke-width: 2px;
+        }
+        #annotation {
+          position:relative;
+          stroke:	#00FFFF;
+          stroke-width: 2px;
+          width: 600px;
+          bottom: 600px;
+          left:70px;
+        Padding-top:30px;
+
+        
+         
+        }
+
+
+        #annotation_1 {
+          position: absolute;
+          stroke:	#00FFFF;
+         font-size:15px;
+          stroke-width: 2px;
+          width: 420px;
+          bottom: 70px;
+            left:1100px;
+            padding:30px;
+          
+            
+
