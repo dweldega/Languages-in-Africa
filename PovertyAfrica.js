@@ -206,7 +206,7 @@ function AfricaPoverty(data) {
         var pov = [];
         for(var i = 0; i < YEARS.length; ++i) {
             if(d[YEARS[i]] != "..")
-				pov.push((+d[YEARS[i]]*1000000) / countryData[d.Country][POP][i])
+				pov.push((+d[YEARS[i]]*1000000) / countryData[d.Country][POP][i]);
 			else
 				pov.push(-1);
         }
@@ -284,32 +284,49 @@ function GeoAfrica(data) {
                     var fNonPop = d3.format(".2f");
                     var fPop = d3.format(",.0f");
                     
-                    d3.select("#ttCountry").html(Country);
-                    d3.select("#ttPop").html(fPop(countryData[Country][POP][year]));
+                    var pop = fPop(countryData[Country][POP][year]);
+                    var pov = 0;
+                    var hdi = 0;
+                    var lifeEx = 0;
+                    var gini = 0;
+                    var popDens = fNonPop(countryData[Country][POP_DENS][year]);
                     
-                    if(POV in countryData[Country])
-						d3.select("#ttPov").html(fNonPop(countryData[Country][POV][year]));
-					else
-						d3.select("#ttPov").html("N/A");
-                    d3.select("#ttHDI").html(fNonPop(countryData[Country][HDI][year]));
                     
-                    if(LifeEx in countryData[Country])
-						d3.select("#ttLifeEx").html(fNonPop(countryData[Country][LifeEx][year]));
+                    
+                    if(POV in countryData[Country] && countryData[Country][POV][year] != -1)
+						pov = fPop(countryData[Country][POV][year]*100) + "%";
 					else
-						d3.select("#ttPov").html("N/A");
+						pov = "N/A";
+						
+					if(HDI in countryData[Country] && countryData[Country][HDI][year] != -1)
+						hdi = fNonPop(countryData[Country][HDI][year]);
+                    else
+						hdi = "N/A";
+						
+                    if(LifeEx in countryData[Country] && countryData[Country][LifeEx][year] != -1)
+						lifeEx = fNonPop(countryData[Country][LifeEx][year]);
+					else
+						lifeEx = "N/A";
 					
-					if(GINI in countryData[Country])
-						d3.select("#ttGini").html(fNonPop(countryData[Country][GINI][year]));
+					if(GINI in countryData[Country] && countryData[Country][GINI][year] != -1)
+						gini = fNonPop(countryData[Country][GINI][year]);
 					else
-						d3.select("#ttPov").html("N/A");
-                    d3.select("#ttPopDens").html(fNonPop(countryData[Country][POP_DENS][year]));
+						gini = "N/A";
+						
+					d3.select("#ttCountry").html(Country);
+                    d3.select("#ttPop").html(pop);
+					d3.select("#ttPov").html(pov);
+					d3.select("#ttHDI").html(hdi);
+					d3.select("#ttLifeEx").html(lifeEx);
+					d3.select("#ttGini").html(gini);
+                    d3.select("#ttPopDens").html(popDens);
 					
                     //Show the tooltip
                     d3.select(".staticTooltip").classed("hidden", false);
                })
                .on("mouseout", function() {
                     //Hide the tooltip
-                    //d3.select(".staticTooltip").classed("hidden", true);
+                    d3.select(".staticTooltip").classed("hidden", true);
                });            
                 
 }
