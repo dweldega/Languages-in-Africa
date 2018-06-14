@@ -284,32 +284,32 @@ function GeoAfrica(data) {
                     var fNonPop = d3.format(".2f");
                     var fPop = d3.format(",.0f");
                     
-                    d3.select(".ttCountry").html(Country);
-                    d3.select(".ttPop").html(fPop(countryData[Country][POP][year]));
+                    d3.select("#ttCountry").html(Country);
+                    d3.select("#ttPop").html(fPop(countryData[Country][POP][year]));
                     
                     if(POV in countryData[Country])
-						d3.select(".ttPov").html(fNonPop(countryData[Country][POV][year]));
+						d3.select("#ttPov").html(fNonPop(countryData[Country][POV][year]));
 					else
-						d3.select(".ttPov").html("N/A");
-                    d3.select(".ttHDI").html(fNonPop(countryData[Country][HDI][year]));
+						d3.select("#ttPov").html("N/A");
+                    d3.select("#ttHDI").html(fNonPop(countryData[Country][HDI][year]));
                     
                     if(LifeEx in countryData[Country])
-						d3.select(".ttLifeEx").html(fNonPop(countryData[Country][LifeEx][year]));
+						d3.select("#ttLifeEx").html(fNonPop(countryData[Country][LifeEx][year]));
 					else
-						d3.select(".ttPov").html("N/A");
+						d3.select("#ttPov").html("N/A");
 					
 					if(GINI in countryData[Country])
-						d3.select(".ttGini").html(fNonPop(countryData[Country][GINI][year]));
+						d3.select("#ttGini").html(fNonPop(countryData[Country][GINI][year]));
 					else
-						d3.select(".ttPov").html("N/A");
-                    d3.select(".ttPopDens").html(fNonPop(countryData[Country][POP_DENS][year]));
+						d3.select("#ttPov").html("N/A");
+                    d3.select("#ttPopDens").html(fNonPop(countryData[Country][POP_DENS][year]));
 					
                     //Show the tooltip
                     d3.select(".staticTooltip").classed("hidden", false);
                })
                .on("mouseout", function() {
                     //Hide the tooltip
-                    d3.select(".staticTooltip").classed("hidden", true);
+                    //d3.select(".staticTooltip").classed("hidden", true);
                });            
                 
 }
