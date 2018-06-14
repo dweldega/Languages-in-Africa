@@ -12,34 +12,42 @@
         <link rel="stylesheet" type="text/css" href="PovertyAfrica.css">
     </head>
     <body onload="btnForm.reset();">
+        <div class="staticTooltip">
+            <p><br>Country:</p>
+            <p>Population:</p>
+            <p>Poverty Rate:</p>
+            <p>HDI:</p>
+            <p>Life Expectancy:</p>
+            <p>Gini Coefficient:</p>
+            <p>Population Density:</p>
+        </div>
         <h1>Poverty and HDI in Africa</h1>
         <h4>Story here</h4>
         <div class='project-container'>
             <!--<div class='legend-container'></div>-->
             <div class='svgContainer'></div>
-             
             <div class='slider-container'>
-                <label class="year" type="updateYR">Data shown for: <span class="yearVal">1998</span></label>
-                <input class="slider" type="range" min="0" max="19" step="1" value="0">
+                <label class="year" type="updateYR">Data shown for: <span class="yearVal" id = "update">1998</span></label>
+                <input class="slider" id = "reset" type="range" min="0" max="19" step="1" value="0">
             </div>
             <div class='right-container'>
                 <div class='buttons'>
                     <form name='btnForm'>
                         <label class="radio-inline">
-                          <input type="radio" name="variable" value='0' checked=true>Poverty Rate
+                          <input type="radio" name="variable" value='0' checked=true onclick = "resetSlider()" > Poverty Rate
                         </label>
                         <label class="radio-inline">
-                          <input type="radio" name="variable" value='2'>HDI
+                          <input type="radio" name="variable" value='2' onclick = "resetSlider()">HDI
                         </label> 
                         <label class="radio-inline">
-                          <input type="radio" name="variable" value='3'>Life Expectancy
+                          <input type="radio" name="variable" value='3' onclick = "resetSlider()">Life Expectancy
                         </label>
                         <label class="radio-inline">
-                          <input type="radio" name="variable" value='4'>Gini Coefficient
+                          <input type="radio" name="variable" value='4' onclick = "resetSlider()">Gini Coefficient
                         </label>
                         <br />
                         <label class="radio-inline" style="text-align:center">
-                          <input type="radio" name="variable" value='1'>Population Density
+                          <input type="radio" name="variable" value='1' onclick = "resetSlider()">Population Density
                         </label>
                       </form>
                 </div>

@@ -24,7 +24,16 @@ var svg = d3.select(".svgContainer").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .attr("transform", "translate(" + (margin.left-100) + "," + margin.top + ")")
+    .attr("transform", "translate(" + (margin.left-100) + "," + margin.top + ")");
+
+//d3.select("body").append("div")
+//    .attr("postion", "absolute")
+//    .attr("width", "100px")
+//    .attr("height", "10px")
+//    .attr("class", "tooltip")
+//    .attr("top", "100px")
+//    .attr("left", "100px")
+//    .text("HI");
 
 var legendWidth = 400;
 var legendHeight = 50;
@@ -123,8 +132,9 @@ function CreateLegend() {
 
 	legendCont.append("text")
 		.attr("class", "caption")
-		.attr("x", x.range()[0])
+		.attr("x", 30)
 		.attr("y", 35)
+        .attr("text-anchor", "right")
 		.attr("fill", "#000")
 		.attr("text-anchor", "start")
 		.attr("font-weight", "bold")
@@ -393,5 +403,13 @@ function updateGeoAfrica() {
     svg.selectAll('path')
         .attr("fill", function(d) { return countryFill(d.properties.brk_name); });
     d3.select(".yearVal").html(YEARS[year]);
+
 }
+
+function resetSlider() {
+    year=0;
+    document.getElementById("update");
+    document.getElementById("reset").value = 0;
+}
+
 

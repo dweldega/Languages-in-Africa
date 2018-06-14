@@ -9,8 +9,9 @@ body {
   shape-rendering: crispEdges;
 }
 
-/*Add Tooltip Type here*/
+/*
+Add Tooltip Type here
 #tooltip rect {
     fill: #5998ffF0;
     font-weight: bold;
-}
+}*/
