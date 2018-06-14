@@ -26,15 +26,6 @@ var svg = d3.select(".svgContainer").append("svg")
     .append("g")
     .attr("transform", "translate(" + (margin.left-100) + "," + margin.top + ")");
 
-//d3.select("body").append("div")
-//    .attr("postion", "absolute")
-//    .attr("width", "100px")
-//    .attr("height", "10px")
-//    .attr("class", "tooltip")
-//    .attr("top", "100px")
-//    .attr("left", "100px")
-//    .text("HI");
-
 var legendWidth = 400;
 var legendHeight = 50;
 var legendCont = svg.append("g")
@@ -52,6 +43,8 @@ var projection = d3.geoMercator()
 var path = d3.geoPath()
     .projection(projection);
 
+// From https://github.com/d3/d3-scale-chromatic
+// From https://bl.ocks.org/mbostock/5562380
 var colorPopDens = d3.scaleThreshold()
     .domain([1, 10, 30, 70, 200, 500])
     .range(d3.schemeBlues[6]);
@@ -432,7 +425,6 @@ function countryFill(name) {
 // Updates happen here onwards
 function updateGeoAfrica() {
     // Draw each province as a path
-    // Taken from http://bl.ocks.org/almccon/fe445f1d6b177fd0946800a48aa59c71
     svg.selectAll('path')
         .attr("fill", function(d) { return countryFill(d.properties.brk_name); });
     d3.select(".yearVal").html(YEARS[year]);
