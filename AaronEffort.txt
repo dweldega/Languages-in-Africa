@@ -1,0 +1,5 @@
+Aaron Steele
+I programmed the basic rendering, I also interpolated the data out to minimize the number of missing data points.
+I figured out how to defer code execution until after all the data files had been loaded.
+I wrote the data structure and access methods for our dictionary where we store all the data loaded from csv files. 
+Me and Danay collaborated to pick the color scales.
